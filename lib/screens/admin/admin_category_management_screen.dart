@@ -263,60 +263,58 @@ class _AdminCategoryManagementScreenState
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              value: _sortBy,
-                              decoration: const InputDecoration(
-                                labelText: 'Urutkan berdasarkan',
-                                border: OutlineInputBorder(),
-                              ),
-                              items: _sortByOptions.map((option) {
-                                String displayText = option;
-                                switch (option) {
-                                  case 'name':
-                                    displayText = 'Nama';
-                                    break;
-                                  case 'created_at':
-                                    displayText = 'Tanggal Dibuat';
-                                    break;
-                                  case 'books_count':
-                                    displayText = 'Jumlah Buku';
-                                    break;
-                                }
-                                return DropdownMenuItem<String>(
-                                  value: option,
-                                  child: Text(displayText),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() => _sortBy = value ?? 'name');
-                                _loadCategories(resetPage: true);
-                              },
+                      // Sort by dropdown
+                      DropdownButtonFormField<String>(
+                        value: _sortBy,
+                        decoration: const InputDecoration(
+                          labelText: 'Urutkan berdasarkan',
+                          border: OutlineInputBorder(),
+                        ),
+                        items: _sortByOptions.map((option) {
+                          String displayText = option;
+                          switch (option) {
+                            case 'name':
+                              displayText = 'Nama';
+                              break;
+                            case 'created_at':
+                              displayText = 'Tanggal Dibuat';
+                              break;
+                            case 'books_count':
+                              displayText = 'Jumlah Buku';
+                              break;
+                          }
+                          return DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(
+                              displayText,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              value: _sortOrder,
-                              decoration: const InputDecoration(
-                                labelText: 'Urutan',
-                                border: OutlineInputBorder(),
-                              ),
-                              items: _sortOrderOptions.map((option) {
-                                return DropdownMenuItem<String>(
-                                  value: option,
-                                  child: Text(option == 'asc' ? 'A-Z' : 'Z-A'),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() => _sortOrder = value ?? 'asc');
-                                _loadCategories(resetPage: true);
-                              },
-                            ),
-                          ),
-                        ],
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() => _sortBy = value ?? 'name');
+                          _loadCategories(resetPage: true);
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      
+                      // Sort order dropdown
+                      DropdownButtonFormField<String>(
+                        value: _sortOrder,
+                        decoration: const InputDecoration(
+                          labelText: 'Urutan',
+                          border: OutlineInputBorder(),
+                        ),
+                        items: _sortOrderOptions.map((option) {
+                          return DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(option == 'asc' ? 'A-Z' : 'Z-A'),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() => _sortOrder = value ?? 'asc');
+                          _loadCategories(resetPage: true);
+                        },
                       ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(

@@ -370,47 +370,94 @@ class _AdminBorrowingManagementScreenState
                                 return Card(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 8),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor:
-                                          _getBorrowingColor(borrowing),
-                                      child: Icon(
-                                        _getBorrowingIcon(borrowing),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    title: Text(
-                                      borrowing.book?.judul ?? 'Unknown Book',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Row(
                                       children: [
-                                        Text(
-                                            'Member: ${borrowing.member?.name ?? 'Unknown Member'}'),
-                                        Text(
-                                            'Pinjam: ${_formatDate(borrowing.borrowDate)}'),
-                                        Text(
-                                            'Kembali: ${_getReturnDateText(borrowing)}'),
-                                        Text(
-                                          'Status: ${_getStatusDisplayText(borrowing)}',
-                                          style: TextStyle(
-                                            color:
-                                                _getBorrowingColor(borrowing),
-                                            fontWeight: FontWeight.w500,
+                                        CircleAvatar(
+                                          backgroundColor:
+                                              _getBorrowingColor(borrowing),
+                                          radius: 20,
+                                          child: Icon(
+                                            _getBorrowingIcon(borrowing),
+                                            color: Colors.white,
+                                            size: 20,
                                           ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                borrowing.book?.judul ?? 'Unknown Book',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                'Member: ${borrowing.member?.name ?? 'Unknown Member'}',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 13,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                'Pinjam: ${_formatDate(borrowing.borrowDate)}',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 13,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                'Kembali: ${_getReturnDateText(borrowing)}',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 13,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal: 8,
+                                                  vertical: 2,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: _getBorrowingColor(borrowing),
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                child: Text(
+                                                  'Status: ${_getStatusDisplayText(borrowing)}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 12,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.info,
+                                              color: Colors.blue),
+                                          onPressed: () =>
+                                              _showBorrowingDetails(borrowing),
                                         ),
                                       ],
                                     ),
-                                    trailing: IconButton(
-                                      icon: const Icon(Icons.info,
-                                          color: Colors.blue),
-                                      onPressed: () =>
-                                          _showBorrowingDetails(borrowing),
-                                    ),
-                                    isThreeLine: true,
                                   ),
                                 );
                               },

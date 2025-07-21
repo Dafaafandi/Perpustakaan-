@@ -211,46 +211,82 @@ class _AdminMemberManagementScreenState
                                 return Card(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 8),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: member.isAdmin
-                                          ? Colors.red
-                                          : Colors.blue,
-                                      child: Text(
-                                        member.name.isNotEmpty
-                                            ? member.name[0].toUpperCase()
-                                            : 'U',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    title: Text(
-                                      member.name,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Row(
                                       children: [
-                                        Text('Email: ${member.email}'),
-                                        Text('Username: ${member.username}'),
-                                        Text('Role: ${member.role}'),
-                                        Text(
-                                          'Type: ${member.isAdmin ? "Admin" : member.isMember ? "Member" : "Visitor"}',
-                                          style: TextStyle(
-                                            color: member.isAdmin
-                                                ? Colors.red
-                                                : Colors.blue,
-                                            fontWeight: FontWeight.w500,
+                                        CircleAvatar(
+                                          backgroundColor: member.isAdmin
+                                              ? Colors.red
+                                              : Colors.blue,
+                                          radius: 20,
+                                          child: Text(
+                                            member.name.isNotEmpty
+                                                ? member.name[0].toUpperCase()
+                                                : 'U',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                member.name,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                'Email: ${member.email}',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 13,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                'Username: ${member.username}',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 13,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                'Role: ${member.role}',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 13,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                'Type: ${member.isAdmin ? "Admin" : member.isMember ? "Member" : "Visitor"}',
+                                                style: TextStyle(
+                                                  color: member.isAdmin
+                                                      ? Colors.red
+                                                      : Colors.blue,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 13,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                         IconButton(
                                           icon: const Icon(Icons.info,
                                               color: Colors.blue),
@@ -259,7 +295,6 @@ class _AdminMemberManagementScreenState
                                         ),
                                       ],
                                     ),
-                                    isThreeLine: true,
                                   ),
                                 );
                               },

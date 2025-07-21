@@ -601,86 +601,91 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                           ),
                         ),
 
-                      // Row 1: Category and Author
-                      Row(
+                      // Filters in Column for better mobile layout
+                      Column(
                         children: [
-                          Expanded(
-                            child: DropdownButtonFormField<int>(
-                              value: _selectedCategoryId,
-                              decoration: InputDecoration(
-                                labelText: 'Kategori',
-                                border: const OutlineInputBorder(),
-                                filled: true,
-                                fillColor: _selectedCategoryId != null
-                                    ? Colors.blue.shade50
-                                    : Colors.white,
-                                prefixIcon: Icon(
-                                  Icons.category,
-                                  color: _selectedCategoryId != null
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                ),
+                          // Category Filter
+                          DropdownButtonFormField<int>(
+                            value: _selectedCategoryId,
+                            decoration: InputDecoration(
+                              labelText: 'Kategori',
+                              border: const OutlineInputBorder(),
+                              filled: true,
+                              fillColor: _selectedCategoryId != null
+                                  ? Colors.blue.shade50
+                                  : Colors.white,
+                              prefixIcon: Icon(
+                                Icons.category,
+                                color: _selectedCategoryId != null
+                                    ? Colors.blue
+                                    : Colors.grey,
                               ),
-                              items: [
-                                const DropdownMenuItem<int>(
-                                  value: null,
-                                  child: Text('Semua Kategori'),
-                                ),
-                                ..._categories
-                                    .map<DropdownMenuItem<int>>((category) {
-                                  return DropdownMenuItem<int>(
-                                    value: category.id,
-                                    child: Text(category.name),
-                                  );
-                                }).toList(),
-                              ],
-                              onChanged: (value) {
-                                setState(() => _selectedCategoryId = value);
-                                _loadBooks(resetPage: true);
-                              },
                             ),
+                            items: [
+                              const DropdownMenuItem<int>(
+                                value: null,
+                                child: Text('Semua Kategori'),
+                              ),
+                              ..._categories
+                                  .map<DropdownMenuItem<int>>((category) {
+                                return DropdownMenuItem<int>(
+                                  value: category.id,
+                                  child: Text(
+                                    category.name,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                            ],
+                            onChanged: (value) {
+                              setState(() => _selectedCategoryId = value);
+                              _loadBooks(resetPage: true);
+                            },
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              value: _selectedAuthor,
-                              decoration: InputDecoration(
-                                labelText: 'Pengarang',
-                                border: const OutlineInputBorder(),
-                                filled: true,
-                                fillColor: _selectedAuthor != null
-                                    ? Colors.blue.shade50
-                                    : Colors.white,
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color: _selectedAuthor != null
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                ),
+                          const SizedBox(height: 12),
+                          
+                          // Author Filter
+                          DropdownButtonFormField<String>(
+                            value: _selectedAuthor,
+                            decoration: InputDecoration(
+                              labelText: 'Pengarang',
+                              border: const OutlineInputBorder(),
+                              filled: true,
+                              fillColor: _selectedAuthor != null
+                                  ? Colors.blue.shade50
+                                  : Colors.white,
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: _selectedAuthor != null
+                                    ? Colors.blue
+                                    : Colors.grey,
                               ),
-                              items: [
-                                const DropdownMenuItem<String>(
-                                  value: null,
-                                  child: Text('Semua Pengarang'),
-                                ),
-                                ..._authors.map((author) {
-                                  return DropdownMenuItem<String>(
-                                    value: author,
-                                    child: Text(author),
-                                  );
-                                }).toList(),
-                              ],
-                              onChanged: (value) {
-                                setState(() => _selectedAuthor = value);
-                                _loadBooks(resetPage: true);
-                              },
                             ),
+                            items: [
+                              const DropdownMenuItem<String>(
+                                value: null,
+                                child: Text('Semua Pengarang'),
+                              ),
+                              ..._authors.map((author) {
+                                return DropdownMenuItem<String>(
+                                  value: author,
+                                  child: Text(
+                                    author,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                            ],
+                            onChanged: (value) {
+                              setState(() => _selectedAuthor = value);
+                              _loadBooks(resetPage: true);
+                            },
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
 
-                      // Row 2: Publisher and Year
+                      // Publisher and Year in Row
                       Row(
                         children: [
                           Expanded(
@@ -708,7 +713,10 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                                 ..._publishers.map((publisher) {
                                   return DropdownMenuItem<String>(
                                     value: publisher,
-                                    child: Text(publisher),
+                                    child: Text(
+                                      publisher,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   );
                                 }).toList(),
                               ],
@@ -718,7 +726,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                               },
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               value: _selectedYear,
