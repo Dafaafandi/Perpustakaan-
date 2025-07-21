@@ -408,57 +408,71 @@ class _MemberBooksListScreenState extends State<MemberBooksListScreen> {
                           Text(
                             book.judul,
                             style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: 15, fontWeight: FontWeight.bold),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 4),
                           Text('oleh ${book.pengarang}',
                               style: TextStyle(
-                                  color: Colors.grey.shade600, fontSize: 14)),
+                                  color: Colors.grey.shade600, fontSize: 13),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis),
                           Text(book.penerbit,
                               style: TextStyle(
-                                  color: Colors.grey.shade600, fontSize: 13)),
+                                  color: Colors.grey.shade600, fontSize: 12),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis),
                           Text('Tahun: ${book.tahun}',
                               style: TextStyle(
-                                  color: Colors.grey.shade600, fontSize: 13)),
+                                  color: Colors.grey.shade600, fontSize: 12)),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: book.stok > 0
-                                  ? Colors.green.shade100
-                                  : Colors.red.shade100,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              book.stok > 0 ? 'Stok: ${book.stok}' : 'Habis',
-                              style: TextStyle(
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
                                 color: book.stok > 0
-                                    ? Colors.green.shade800
-                                    : Colors.red.shade800,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
+                                    ? Colors.green.shade100
+                                    : Colors.red.shade100,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                book.stok > 0 ? 'Stok: ${book.stok}' : 'Habis',
+                                style: TextStyle(
+                                  color: book.stok > 0
+                                      ? Colors.green.shade800
+                                      : Colors.red.shade800,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
+                          const SizedBox(width: 8),
                           if (book.stok > 0)
-                            ElevatedButton(
-                              onPressed: () => _showBorrowDialog(book),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue.shade600,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
+                            Flexible(
+                              child: ElevatedButton(
+                                onPressed: () => _showBorrowDialog(book),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue.shade600,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  minimumSize: const Size(0, 32),
+                                ),
+                                child: const Text(
+                                  'Pinjam',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                               ),
-                              child: const Text('Pinjam'),
                             )
                         ],
                       ),

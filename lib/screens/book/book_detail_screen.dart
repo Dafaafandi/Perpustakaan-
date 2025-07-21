@@ -117,26 +117,49 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           }
           final book = snapshot.data!;
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Container(
                     padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(color: Colors.grey[200], shape: BoxShape.circle),
-                    child: Icon(Icons.menu_book, size: 80, color: Colors.grey[500]),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200], 
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.menu_book, 
+                      size: 60, 
+                      color: Colors.grey[500],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
-                Text(book.judul, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                Text(
+                  book.judul, 
+                  style: const TextStyle(
+                    fontSize: 24, 
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.visible,
+                ),
                 const SizedBox(height: 8),
-                Text('oleh ${book.pengarang}', style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic, color: Colors.grey)),
+                Text(
+                  'oleh ${book.pengarang}', 
+                  style: const TextStyle(
+                    fontSize: 16, 
+                    fontStyle: FontStyle.italic, 
+                    color: Colors.grey,
+                  ),
+                  overflow: TextOverflow.visible,
+                ),
                 const Divider(height: 40, thickness: 1),
                 _buildDetailRow('Penerbit', book.penerbit),
                 _buildDetailRow('Kategori', book.category.name),
                 _buildDetailRow('Tahun Terbit', book.tahun),
                 _buildDetailRow('Stok Tersedia', '${book.stok} buah'),
+                const SizedBox(height: 20),
               ],
             ),
           );
@@ -148,13 +171,23 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Widget _buildDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(width: 120, child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-          const Text(':', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(width: 16),
-          Expanded(child: Text(value, style: const TextStyle(fontSize: 16))),
+          Text(
+            label, 
+            style: const TextStyle(
+              fontWeight: FontWeight.bold, 
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value, 
+            style: const TextStyle(fontSize: 16),
+            overflow: TextOverflow.visible,
+          ),
         ],
       ),
     );

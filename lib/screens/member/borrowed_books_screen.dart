@@ -639,39 +639,44 @@ class _BorrowedBooksScreenState extends State<BorrowedBooksScreen> {
                                     ]
                                   ],
                                 ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: statusColor,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        status,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
+                                trailing: SizedBox(
+                                  width: 100,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6,
+                                            vertical: 3,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: statusColor,
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Text(
+                                            status,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    PopupMenuButton<String>(
-                                      onSelected: (value) {
-                                        switch (value) {
-                                          case 'detail':
-                                            _showBorrowingDetail(borrowing);
-                                            break;
-                                          case 'return':
-                                            _showReturnDialog(borrowing);
-                                            break;
-                                        }
-                                      },
+                                      PopupMenuButton<String>(
+                                        padding: EdgeInsets.zero,
+                                        onSelected: (value) {
+                                          switch (value) {
+                                            case 'detail':
+                                              _showBorrowingDetail(borrowing);
+                                              break;
+                                            case 'return':
+                                              _showReturnDialog(borrowing);
+                                              break;
+                                          }
+                                        },
                                       itemBuilder: (context) => [
                                         const PopupMenuItem(
                                           value: 'detail',
@@ -697,7 +702,8 @@ class _BorrowedBooksScreenState extends State<BorrowedBooksScreen> {
                                           ),
                                       ],
                                     ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
