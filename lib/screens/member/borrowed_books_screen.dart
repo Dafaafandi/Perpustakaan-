@@ -652,7 +652,8 @@ class _BorrowedBooksScreenState extends State<BorrowedBooksScreen> {
                                           ),
                                           decoration: BoxDecoration(
                                             color: statusColor,
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           child: Text(
                                             status,
@@ -677,31 +678,31 @@ class _BorrowedBooksScreenState extends State<BorrowedBooksScreen> {
                                               break;
                                           }
                                         },
-                                      itemBuilder: (context) => [
-                                        const PopupMenuItem(
-                                          value: 'detail',
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.info_outline),
-                                              SizedBox(width: 8),
-                                              Text('Detail'),
-                                            ],
-                                          ),
-                                        ),
-                                        if (borrowing['actual_return_date'] ==
-                                            null)
+                                        itemBuilder: (context) => [
                                           const PopupMenuItem(
-                                            value: 'return',
+                                            value: 'detail',
                                             child: Row(
                                               children: [
-                                                Icon(Icons.assignment_return),
+                                                Icon(Icons.info_outline),
                                                 SizedBox(width: 8),
-                                                Text('Kembalikan'),
+                                                Text('Detail'),
                                               ],
                                             ),
                                           ),
-                                      ],
-                                    ),
+                                          if (borrowing['actual_return_date'] ==
+                                              null)
+                                            const PopupMenuItem(
+                                              value: 'return',
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.assignment_return),
+                                                  SizedBox(width: 8),
+                                                  Text('Kembalikan'),
+                                                ],
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),

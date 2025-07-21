@@ -36,8 +36,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         title: const Text('Konfirmasi Hapus'),
         content: const Text('Apakah Anda yakin ingin menghapus buku ini?'),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Batal')),
-          TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Hapus', style: TextStyle(color: Colors.red))),
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Batal')),
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Hapus', style: TextStyle(color: Colors.red))),
         ],
       ),
     );
@@ -45,11 +49,13 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       final success = await _apiService.deleteBook(widget.bookId);
       if (mounted) {
         if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Buku berhasil dihapus')));
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Buku berhasil dihapus')));
           // Kembali ke halaman list dan kirim sinyal refresh
           Navigator.of(context).pop(true);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gagal menghapus buku')));
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Gagal menghapus buku')));
         }
       }
     }
@@ -125,31 +131,31 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200], 
+                      color: Colors.grey[200],
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.menu_book, 
-                      size: 60, 
+                      Icons.menu_book,
+                      size: 60,
                       color: Colors.grey[500],
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  book.judul, 
+                  book.judul,
                   style: const TextStyle(
-                    fontSize: 24, 
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.visible,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'oleh ${book.pengarang}', 
+                  'oleh ${book.pengarang}',
                   style: const TextStyle(
-                    fontSize: 16, 
-                    fontStyle: FontStyle.italic, 
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
                     color: Colors.grey,
                   ),
                   overflow: TextOverflow.visible,
@@ -175,16 +181,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label, 
+            label,
             style: const TextStyle(
-              fontWeight: FontWeight.bold, 
+              fontWeight: FontWeight.bold,
               fontSize: 14,
               color: Colors.grey,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            value, 
+            value,
             style: const TextStyle(fontSize: 16),
             overflow: TextOverflow.visible,
           ),
