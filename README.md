@@ -1,16 +1,25 @@
-# perpus_app_new
+# Mamorasoft Library
 
-A new Flutter project.
+By Dafaafandi
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Mamorasoft Library ini adalah aplikasi yang saya buat menggunakan flutter saja karena untuk Backend sudah dari tempat magang berupa API.
+Fitur-Fitur yang ada di code ini:
+*Member:
+1.Halaman Dashboard member
+2.Refresh
+3.Statistik member
+4.Peminjaman buku
+5.Manajemen peminjaman (status,mengembalikan)
+6.Informasi penggunaan
+*Admin:
+1.Halaman Dashboard Admin
+2.Refresh
+3.Statistik Admin (buku,total peminjaman,stok,dll)
+4.Manajemen peminjaman semua member
+5.Manajemen akun member
+6.Tambah buku
+7.Tambah kategori
+8.list buku
+9.List kategori
