@@ -207,17 +207,17 @@ class _MemberDashboardScreenState extends State<MemberDashboardScreen> {
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 32, color: Colors.indigo),
-              const SizedBox(height: 8),
+              Icon(icon, size: 24, color: Colors.indigo),
+              const SizedBox(height: 4),
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -316,28 +316,28 @@ class _MemberDashboardScreenState extends State<MemberDashboardScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
                   // Quick Actions
                   const Text(
                     'Aksi Cepat',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
 
                   GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1.5,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 2.2,
                     children: [
                       _buildQuickActionButton(
-                        'Member Features',
+                        'Features',
                         Icons.apps,
                         () {
                           Navigator.push(
@@ -349,7 +349,7 @@ class _MemberDashboardScreenState extends State<MemberDashboardScreen> {
                         },
                       ),
                       _buildQuickActionButton(
-                        'Refresh Stats',
+                        'Refresh',
                         Icons.refresh,
                         () {
                           _loadMemberStats();
@@ -362,9 +362,9 @@ class _MemberDashboardScreenState extends State<MemberDashboardScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

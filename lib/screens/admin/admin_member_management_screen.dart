@@ -210,26 +210,27 @@ class _AdminMemberManagementScreenState
 
                                 return Card(
                                   margin: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
+                                      horizontal: 16, vertical: 6),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(12),
+                                    padding: const EdgeInsets.all(10),
                                     child: Row(
                                       children: [
                                         CircleAvatar(
                                           backgroundColor: member.isAdmin
                                               ? Colors.red
                                               : Colors.blue,
-                                          radius: 20,
+                                          radius: 18,
                                           child: Text(
                                             member.name.isNotEmpty
                                                 ? member.name[0].toUpperCase()
                                                 : 'U',
                                             style: const TextStyle(
                                                 color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
                                           ),
                                         ),
-                                        const SizedBox(width: 12),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
@@ -239,17 +240,17 @@ class _AdminMemberManagementScreenState
                                                 member.name,
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              const SizedBox(height: 4),
+                                              const SizedBox(height: 2),
                                               Text(
-                                                'Email: ${member.email}',
+                                                member.email,
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
-                                                  fontSize: 13,
+                                                  fontSize: 11,
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -258,40 +259,47 @@ class _AdminMemberManagementScreenState
                                                 'Username: ${member.username}',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
-                                                  fontSize: 13,
+                                                  fontSize: 11,
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              Text(
-                                                'Role: ${member.role}',
-                                                style: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontSize: 13,
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 6,
+                                                  vertical: 2,
                                                 ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                'Type: ${member.isAdmin ? "Admin" : member.isMember ? "Member" : "Visitor"}',
-                                                style: TextStyle(
+                                                decoration: BoxDecoration(
                                                   color: member.isAdmin
                                                       ? Colors.red
                                                       : Colors.blue,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 13,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
                                                 ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
+                                                child: Text(
+                                                  member.isAdmin
+                                                      ? "Admin"
+                                                      : "Member",
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),
                                         ),
                                         IconButton(
                                           icon: const Icon(Icons.info,
-                                              color: Colors.blue),
+                                              color: Colors.blue, size: 20),
                                           onPressed: () =>
                                               _showMemberDetails(member),
+                                          constraints: const BoxConstraints(
+                                            minWidth: 32,
+                                            minHeight: 32,
+                                          ),
                                         ),
                                       ],
                                     ),

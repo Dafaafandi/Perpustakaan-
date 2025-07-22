@@ -369,42 +369,44 @@ class _AdminBorrowingManagementScreenState
 
                                 return Card(
                                   margin: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
+                                      horizontal: 16, vertical: 6),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(12),
+                                    padding: const EdgeInsets.all(10),
                                     child: Row(
                                       children: [
                                         CircleAvatar(
                                           backgroundColor:
                                               _getBorrowingColor(borrowing),
-                                          radius: 20,
+                                          radius: 18,
                                           child: Icon(
                                             _getBorrowingIcon(borrowing),
                                             color: Colors.white,
-                                            size: 20,
+                                            size: 18,
                                           ),
                                         ),
-                                        const SizedBox(width: 12),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                borrowing.book?.judul ?? 'Unknown Book',
+                                                borrowing.book?.judul ??
+                                                    'Unknown Book',
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
+                                                  fontSize: 14,
                                                 ),
-                                                maxLines: 2,
+                                                maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              const SizedBox(height: 4),
+                                              const SizedBox(height: 2),
                                               Text(
-                                                'Member: ${borrowing.member?.name ?? 'Unknown Member'}',
+                                                borrowing.member?.name ??
+                                                    'Unknown Member',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
-                                                  fontSize: 13,
+                                                  fontSize: 11,
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -413,38 +415,35 @@ class _AdminBorrowingManagementScreenState
                                                 'Pinjam: ${_formatDate(borrowing.borrowDate)}',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
-                                                  fontSize: 13,
+                                                  fontSize: 10,
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              Text(
-                                                'Kembali: ${_getReturnDateText(borrowing)}',
-                                                style: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontSize: 13,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                                              const SizedBox(height: 2),
                                               Container(
-                                                padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 6,
                                                   vertical: 2,
                                                 ),
                                                 decoration: BoxDecoration(
-                                                  color: _getBorrowingColor(borrowing),
-                                                  borderRadius: BorderRadius.circular(12),
+                                                  color: _getBorrowingColor(
+                                                      borrowing),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
                                                 ),
                                                 child: Text(
-                                                  'Status: ${_getStatusDisplayText(borrowing)}',
+                                                  _getStatusDisplayText(
+                                                      borrowing),
                                                   style: const TextStyle(
                                                     color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 10,
                                                   ),
                                                   maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
                                             ],

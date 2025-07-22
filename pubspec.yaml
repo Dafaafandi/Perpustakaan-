@@ -27,6 +27,7 @@ dependencies:
 
   # File handling - Updated versions
   file_picker: ^8.1.2 # Update to latest version
+  image_picker: ^1.0.7 # Add image picker for photo selection
   path_provider: ^2.1.2
   permission_handler: ^11.2.0
 

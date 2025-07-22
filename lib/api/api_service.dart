@@ -104,18 +104,14 @@ class ApiService {
   Future<int?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getInt('user_id');
-    if (kDebugMode) {
-
-    }
+    if (kDebugMode) {}
     return userId;
   }
 
   Future<void> _saveUserId(int id) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('user_id', id);
-    if (kDebugMode) {
-
-    }
+    if (kDebugMode) {}
   }
 
   // Public method to save user ID (for external use)
@@ -129,9 +125,7 @@ class ApiService {
       await _dio.post('/logout');
     } catch (e) {
       // Continue with local logout even if server call fails
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
     } finally {
       // Always clear local data
       final prefs = await SharedPreferences.getInstance();
@@ -245,14 +239,11 @@ class ApiService {
         } else if (e.type == DioExceptionType.connectionError) {
           message = 'Tidak dapat terhubung ke server';
         }
-
       }
 
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -297,7 +288,6 @@ class ApiService {
         } else if (e.type == DioExceptionType.connectionError) {
           message = 'Tidak dapat terhubung ke server';
         }
-
       }
 
       return false;
@@ -318,13 +308,46 @@ class ApiService {
       );
       return response.statusCode == 201 || response.statusCode == 200;
     } on DioException catch (e) {
-      if (kDebugMode) {
+      if (kDebugMode) {}
+      return false;
+    } catch (e) {
+      if (kDebugMode) {}
+      return false;
+    }
+  }
 
+  // == CREATE dengan Upload Gambar ==
+  Future<bool> addBookWithImage(
+      Map<String, String> bookData, dynamic imageFile) async {
+    try {
+      final formData = FormData.fromMap(bookData);
+
+      // Tambahkan file gambar jika ada
+      if (imageFile != null) {
+        String fileName = imageFile.path.split('/').last;
+        formData.files.add(MapEntry(
+          'path', // Sesuai dengan validasi backend Laravel
+          await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        ));
+      }
+
+      final response = await _dio.post(
+        '/book/create',
+        data: formData,
+        options: Options(
+          contentType: 'multipart/form-data',
+        ),
+      );
+      return response.statusCode == 201 || response.statusCode == 200;
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('Error adding book with image: ${e.message}');
+        print('Response: ${e.response?.data}');
       }
       return false;
     } catch (e) {
       if (kDebugMode) {
-
+        print('Error adding book with image: $e');
       }
       return false;
     }
@@ -343,13 +366,46 @@ class ApiService {
       );
       return response.statusCode == 200;
     } on DioException catch (e) {
-      if (kDebugMode) {
+      if (kDebugMode) {}
+      return false;
+    } catch (e) {
+      if (kDebugMode) {}
+      return false;
+    }
+  }
 
+  // == UPDATE dengan Upload Gambar ==
+  Future<bool> updateBookWithImage(
+      int id, Map<String, String> bookData, dynamic imageFile) async {
+    try {
+      final formData = FormData.fromMap(bookData);
+
+      // Tambahkan file gambar jika ada
+      if (imageFile != null) {
+        String fileName = imageFile.path.split('/').last;
+        formData.files.add(MapEntry(
+          'image',
+          await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        ));
+      }
+
+      final response = await _dio.post(
+        '/book/$id/update',
+        data: formData,
+        options: Options(
+          contentType: 'multipart/form-data',
+        ),
+      );
+      return response.statusCode == 200;
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('Error updating book with image: ${e.message}');
+        print('Response: ${e.response?.data}');
       }
       return false;
     } catch (e) {
       if (kDebugMode) {
-
+        print('Error updating book with image: $e');
       }
       return false;
     }
@@ -397,14 +453,10 @@ class ApiService {
       // If structure is unexpected, return empty list
       return [];
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal mengambil data buku dari server.');
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Terjadi kesalahan yang tidak terduga.');
     }
   }
@@ -428,14 +480,10 @@ class ApiService {
 
       throw Exception('Struktur data detail buku tidak terduga.');
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal memuat detail buku.');
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Terjadi kesalahan yang tidak terduga.');
     }
   }
@@ -458,14 +506,10 @@ class ApiService {
       );
       return response.statusCode == 201 || response.statusCode == 200;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -486,14 +530,10 @@ class ApiService {
       );
       return response.statusCode == 200;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -545,14 +585,10 @@ class ApiService {
 
       return [];
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal memuat kategori.');
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Terjadi kesalahan yang tidak terduga.');
     }
   }
@@ -623,9 +659,7 @@ class ApiService {
         queryParams['sort_order'] = sortOrder; // asc, desc
       }
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       final response =
           await _dio.get('/book/all', queryParameters: queryParams);
@@ -743,9 +777,7 @@ class ApiService {
         };
       }
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal mengambil data buku dari server.');
     }
   }
@@ -760,9 +792,7 @@ class ApiService {
     bool? hasBooks, // Filter categories that have books or not
   }) async {
     try {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       // Since the API endpoint '/category/all/all' doesn't seem to support
       // server-side filtering and pagination, we'll use client-side approach
@@ -770,9 +800,7 @@ class ApiService {
         final allCategories = await getCategories();
         List<CategoryModel.Category> filteredCategories = [...allCategories];
 
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
 
         // Apply search filter
         if (search != null && search.isNotEmpty) {
@@ -780,7 +808,6 @@ class ApiService {
               .where((category) =>
                   category.name.toLowerCase().contains(search.toLowerCase()))
               .toList();
-          
         }
 
         // Apply hasBooks filter - placeholder implementation
@@ -800,7 +827,6 @@ class ApiService {
               return category.id <= 50;
             }).toList();
           }
-          
         }
 
         // Apply sorting
@@ -828,7 +854,6 @@ class ApiService {
             }
             return sortOrder == 'desc' ? -comparison : comparison;
           });
-          
         }
 
         // Implement pagination
@@ -851,9 +876,7 @@ class ApiService {
           'per_page': perPage,
         };
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
         return {
           'categories': <CategoryModel.Category>[],
           'current_page': 1,
@@ -863,9 +886,7 @@ class ApiService {
         };
       }
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal mengambil data kategori dari server.');
     }
   }
@@ -886,9 +907,7 @@ class ApiService {
         return [];
       }
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal mencari buku.');
     }
   }
@@ -911,9 +930,7 @@ class ApiService {
 
       for (String endpoint in endpointsToTry) {
         try {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
 
           // Prepare headers with authentication if available
           Map<String, dynamic> headers = {};
@@ -924,22 +941,16 @@ class ApiService {
           response =
               await _dio.get(endpoint, options: Options(headers: headers));
           if (response.statusCode == 200) {
-            if (kDebugMode) {
-
-            }
+            if (kDebugMode) {}
             break;
           }
         } catch (e) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
           continue;
         }
       }
 
-      if (response == null) {
-        
-      }
+      if (response == null) {}
 
       if (response != null) {
         final responseData = response.data;
@@ -954,7 +965,6 @@ class ApiService {
             // Handle single user object
             if (data is Map<String, dynamic> && data.containsKey('user')) {
               // This is likely the current user endpoint, try to get all users differently
-              
             }
 
             // Handle list of users
@@ -1003,16 +1013,13 @@ class ApiService {
                                 .toList());
                       }
                     } catch (e) {
-                      if (kDebugMode) {
-
-                      }
+                      if (kDebugMode) {}
                       break;
                     }
                   }
                 }
 
                 // Validate we got the expected count
-                
               }
             }
           }
@@ -1132,9 +1139,7 @@ class ApiService {
               hasMorePages = false;
             }
           } catch (e) {
-            if (kDebugMode) {
-
-            }
+            if (kDebugMode) {}
             hasMorePages = false;
           }
         }
@@ -1160,9 +1165,7 @@ class ApiService {
             }
           }
         } catch (e) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
         }
 
         // 3. Try to get members from book borrowing history with higher per_page
@@ -1192,34 +1195,24 @@ class ApiService {
             }
           }
         } catch (e) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
         }
 
         if (uniqueMembers.isNotEmpty) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
           return uniqueMembers.values.toList();
         }
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return _getMockMembers();
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       // Return mock data instead of empty list for better UX
       return _getMockMembers();
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return _getMockMembers();
     }
   }
@@ -1294,9 +1287,7 @@ class ApiService {
         } catch (e) {
           try {
             response = await _dio.get('/members', queryParameters: queryParams);
-          } catch (e) {
-            
-          }
+          } catch (e) {}
         }
       }
 
@@ -1323,9 +1314,7 @@ class ApiService {
       // If direct member endpoints fail, get members from getMembers() which extracts from borrowing data
       try {
         allMembers = await getMembers();
-        
       } catch (e) {
-        
         return _getMockMembersPaginated(page, perPage, search);
       }
 
@@ -1359,9 +1348,7 @@ class ApiService {
         'per_page': perPage,
       };
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return _getMockMembersPaginated(page, perPage, search);
     }
   }
@@ -1418,17 +1405,13 @@ class ApiService {
         queryParams['status'] = status;
       }
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       final response =
           await _dio.get('/peminjaman', queryParameters: queryParams);
       final responseData = response.data;
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       // Handle the correct API response structure based on your JSON data
       if (responseData is Map<String, dynamic> &&
@@ -1468,14 +1451,10 @@ class ApiService {
         'per_page': perPage,
       };
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal mengambil data peminjaman.');
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Terjadi kesalahan yang tidak terduga.');
     }
   }
@@ -1498,9 +1477,7 @@ class ApiService {
 
       return [];
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       throw Exception('Gagal mengambil data peminjaman.');
     }
   }
@@ -1521,9 +1498,7 @@ class ApiService {
 
       return null;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return null;
     }
   }
@@ -1546,14 +1521,10 @@ class ApiService {
       );
       return response.statusCode == 201 || response.statusCode == 200;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -1564,21 +1535,15 @@ class ApiService {
       // Gunakan endpoint return yang benar untuk mengembalikan stok buku
       final response = await _dio.post('/peminjaman/book/$peminjamanId/return');
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       // Endpoint return yang benar akan mengembalikan stok buku
       return response.statusCode == 200;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -1588,9 +1553,7 @@ class ApiService {
   // Get dashboard statistics (enhanced with real data extraction)
   Future<Map<String, dynamic>?> getDashboardStats() async {
     try {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       // Try to calculate stats from real data
       Map<String, dynamic> calculatedStats = {
@@ -1614,13 +1577,9 @@ class ApiService {
         }
         calculatedStats['total_stock'] = totalStock;
 
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
         calculatedStats['total_stock'] = calculatedStats['total_books'];
       }
 
@@ -1628,26 +1587,18 @@ class ApiService {
       try {
         final members = await getMembers();
         calculatedStats['total_members'] = members.length;
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       // Get categories count
       try {
         final categories = await getCategories();
         calculatedStats['total_categories'] = categories.length;
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
         calculatedStats['total_categories'] = 8; // fallback
       }
 
@@ -1658,9 +1609,7 @@ class ApiService {
         int overdueBorrowings = 0;
         final DateTime now = DateTime.now();
 
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
 
         for (var borrowing in borrowings) {
           if (kDebugMode && borrowings.indexOf(borrowing) < 3) {
@@ -1692,7 +1641,6 @@ class ApiService {
                 }
               } catch (e) {
                 // Skip if date parsing fails
-                
               }
             }
           }
@@ -1701,13 +1649,9 @@ class ApiService {
         calculatedStats['books_borrowed'] = activeBorrowings;
         calculatedStats['overdue_books'] = overdueBorrowings;
 
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
         // Set safe defaults
         calculatedStats['books_borrowed'] = 0;
         calculatedStats['overdue_books'] = 0;
@@ -1721,15 +1665,12 @@ class ApiService {
 
       // Ensure available books is never negative
       if (availableBooks < 0) {
-        
         availableBooks = 0;
       }
 
       calculatedStats['books_available'] = availableBooks;
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       // Return calculated stats if we have any real data
       if (calculatedStats['total_books'] > 0 ||
@@ -1739,14 +1680,10 @@ class ApiService {
       }
 
       // Return mock data only if no real data is available
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return _getMockDashboardStats();
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return _getMockDashboardStats();
     }
   }
@@ -1788,9 +1725,7 @@ class ApiService {
       }
       return null;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return null;
     }
   }
@@ -1801,9 +1736,7 @@ class ApiService {
       final response = await _dio.download(url, savePath);
       return response.statusCode == 200;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -1827,9 +1760,7 @@ class ApiService {
       }
       return null;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return null;
     }
   }
@@ -1851,9 +1782,7 @@ class ApiService {
       }
       return null;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return null;
     }
   }
@@ -1874,9 +1803,7 @@ class ApiService {
       }
       return null;
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return null;
     }
   }
@@ -1940,9 +1867,7 @@ class ApiService {
       for (int attemptIndex = 0;
           attemptIndex < attempts.length;
           attemptIndex++) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
 
         try {
           final formData = FormData.fromMap(attempts[attemptIndex]);
@@ -1959,9 +1884,7 @@ class ApiService {
             ),
           );
 
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
 
           // Check if response contains status field indicating success/failure
           if (response.statusCode == 200 || response.statusCode == 201) {
@@ -1982,7 +1905,7 @@ class ApiService {
                   };
                 } else if (attemptIndex < attempts.length - 1) {
                   // Try next attempt if not the last one
-                  
+
                   continue;
                 } else {
                   // This was the last attempt
@@ -2020,7 +1943,6 @@ class ApiService {
           }
         } catch (e) {
           if (attemptIndex < attempts.length - 1) {
-            
             continue; // Try next attempt
           } else {
             rethrow; // Last attempt, let the outer catch handle it
@@ -2035,9 +1957,7 @@ class ApiService {
         'data': null
       };
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       // Handle different error cases
       if (e.response?.statusCode == 401) {
@@ -2089,9 +2009,7 @@ class ApiService {
         'data': e.response?.data
       };
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return {
         'success': false,
         'message': 'Terjadi kesalahan tidak terduga',
@@ -2155,9 +2073,7 @@ class ApiService {
       'isAuthenticated': token != null && token.isNotEmpty && userId != null,
     };
 
-    if (kDebugMode) {
-
-    }
+    if (kDebugMode) {}
 
     return status;
   }
@@ -2177,9 +2093,7 @@ class ApiService {
 
       for (String endpoint in endpointsToTry) {
         try {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
 
           Map<String, dynamic> headers = {};
           if (token != null) {
@@ -2192,9 +2106,7 @@ class ApiService {
           if (response.statusCode == 200) {
             final responseData = response.data;
 
-            if (kDebugMode) {
-
-            }
+            if (kDebugMode) {}
 
             // Handle different response structures
             if (responseData is Map<String, dynamic>) {
@@ -2202,30 +2114,24 @@ class ApiService {
                   responseData['data'] != null) {
                 final data = responseData['data'];
                 if (data is Map<String, dynamic> && data['id'] != null) {
-                  if (kDebugMode) {
-
-                  }
+                  if (kDebugMode) {}
                   return data;
                 }
               } else if (responseData['data'] is Map<String, dynamic>) {
                 final data = responseData['data'];
                 if (data['id'] != null) {
-                  if (kDebugMode) {
-
-                  }
+                  if (kDebugMode) {}
                   return data;
                 }
               } else if (responseData['id'] != null) {
                 // Direct user object
-                
+
                 return responseData;
               }
             }
           }
         } catch (e) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
           continue;
         }
       }
@@ -2242,7 +2148,6 @@ class ApiService {
                 borrowing['member']['name'] == userName) {
               final memberData = borrowing['member'];
               if (memberData['id'] != null) {
-                
                 return memberData;
               }
             }
@@ -2250,23 +2155,18 @@ class ApiService {
                 borrowing['user']['name'] == userName) {
               final userData = borrowing['user'];
               if (userData['id'] != null) {
-                
                 return userData;
               }
             }
           }
         }
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return null;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return null;
     }
   }
@@ -2276,15 +2176,11 @@ class ApiService {
     try {
       final userName = await getUserName();
       if (userName == null || userName.isEmpty) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
         return null;
       }
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       final borrowings = await getAllBorrowings();
 
@@ -2295,7 +2191,7 @@ class ApiService {
           if (memberData['name'] == userName && memberData['id'] != null) {
             final userId = memberData['id'] as int;
             await saveUserId(userId);
-            
+
             return userId;
           }
         }
@@ -2306,7 +2202,7 @@ class ApiService {
           if (userData['name'] == userName && userData['id'] != null) {
             final userId = userData['id'] as int;
             await saveUserId(userId);
-            
+
             return userId;
           }
         }
@@ -2314,9 +2210,7 @@ class ApiService {
 
       return null;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return null;
     }
   }
@@ -2388,9 +2282,7 @@ class ApiService {
 
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -2412,9 +2304,7 @@ class ApiService {
       );
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -2453,9 +2343,7 @@ class ApiService {
 
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -2467,9 +2355,7 @@ class ApiService {
       final response = await _dio.get('/peminjaman/all');
       final responseData = response.data;
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
 
       // Handle the /all endpoint response structure
       if (responseData is Map<String, dynamic> &&
@@ -2507,20 +2393,14 @@ class ApiService {
         return borrowingList.map((json) => Borrowing.fromJson(json)).toList();
       }
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return [];
     } on DioException catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       // Return empty list instead of throwing for better UX
       return [];
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return [];
     }
   }
@@ -2531,9 +2411,7 @@ class ApiService {
     int currentPage = 1;
     int lastPage = 1;
 
-    if (kDebugMode) {
-
-    }
+    if (kDebugMode) {}
 
     do {
       try {
@@ -2565,13 +2443,11 @@ class ApiService {
           currentPage++; // Siapkan untuk halaman berikutnya
         } else {
           // Jika struktur data tidak sesuai, hentikan loop
-          
+
           break;
         }
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
         break; // Hentikan loop jika ada error
       }
     } while (currentPage <= lastPage);
@@ -2600,9 +2476,7 @@ class ApiService {
 
       for (String endpoint in endpointsToTry) {
         try {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
 
           final response = await _dio.put(
             endpoint,
@@ -2611,15 +2485,11 @@ class ApiService {
           );
 
           if (response.statusCode == 200) {
-            if (kDebugMode) {
-
-            }
+            if (kDebugMode) {}
             return true;
           }
         } catch (e) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
           continue;
         }
       }
@@ -2634,9 +2504,7 @@ class ApiService {
 
       for (String endpoint in postEndpointsToTry) {
         try {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
 
           final formData = FormData.fromMap({'role': newRole});
           final response = await _dio.post(
@@ -2646,27 +2514,19 @@ class ApiService {
           );
 
           if (response.statusCode == 200) {
-            if (kDebugMode) {
-
-            }
+            if (kDebugMode) {}
             return true;
           }
         } catch (e) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
           continue;
         }
       }
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -2690,9 +2550,7 @@ class ApiService {
 
       for (String endpoint in endpointsToTry) {
         try {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
 
           final response = await _dio.delete(
             endpoint,
@@ -2700,27 +2558,19 @@ class ApiService {
           );
 
           if (response.statusCode == 200) {
-            if (kDebugMode) {
-
-            }
+            if (kDebugMode) {}
             return true;
           }
         } catch (e) {
-          if (kDebugMode) {
-
-          }
+          if (kDebugMode) {}
           continue;
         }
       }
 
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return false;
     }
   }
@@ -2751,16 +2601,12 @@ class ApiService {
         }
         return authors.toList()..sort();
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return [];
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return [];
     }
   }
@@ -2789,16 +2635,12 @@ class ApiService {
         }
         return publishers.toList()..sort();
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return [];
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return [];
     }
   }
@@ -2830,16 +2672,12 @@ class ApiService {
           ..sort((a, b) => b.compareTo(a)); // Newest first
         return yearsList;
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return [];
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return [];
     }
   }
@@ -2884,9 +2722,7 @@ class ApiService {
                 },
         };
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return {
@@ -2897,9 +2733,7 @@ class ApiService {
         'year_range': null,
       };
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return {
         'total_books': 0,
         'total_categories': 0,
@@ -2992,16 +2826,12 @@ class ApiService {
           return true;
         }).toList();
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return [];
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return [];
     }
   }
@@ -3078,16 +2908,12 @@ class ApiService {
 
         return filteredCategories;
       } catch (e) {
-        if (kDebugMode) {
-
-        }
+        if (kDebugMode) {}
       }
 
       return [];
     } catch (e) {
-      if (kDebugMode) {
-
-      }
+      if (kDebugMode) {}
       return [];
     }
   }

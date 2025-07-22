@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:perpus_app/api/api_service.dart';
 import 'package:perpus_app/models/book.dart';
 import 'package:perpus_app/models/category.dart' as CategoryModel;
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AdminBookManagementScreen extends StatefulWidget {
   const AdminBookManagementScreen({super.key});
@@ -167,7 +169,12 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
     _showBookDialog(book: book);
   }
 
-  void _showBookDialog({Book? book}) {
+  void _showBookDialog({Book? book}) async {
+    // Pastikan categories sudah dimuat
+    if (_categories.isEmpty) {
+      await _loadCategories();
+    }
+
     final titleController = TextEditingController(text: book?.judul ?? '');
     final authorController = TextEditingController(text: book?.pengarang ?? '');
     final publisherController =
@@ -175,10 +182,10 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
     final yearController = TextEditingController(text: book?.tahun ?? '');
     final stockController =
         TextEditingController(text: book?.stok.toString() ?? '1');
-    final pathController =
-        TextEditingController(text: book?.path ?? ''); // Field baru
-    int? selectedCategoryId = book?.category.id;
 
+    int? selectedCategoryId = book?.category.id;
+    File? selectedImage;
+    final ImagePicker picker = ImagePicker();
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
@@ -193,62 +200,190 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Judul Buku',
                     border: OutlineInputBorder(),
+                    isDense: true,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextField(
                   controller: authorController,
                   decoration: const InputDecoration(
                     labelText: 'Pengarang',
                     border: OutlineInputBorder(),
+                    isDense: true,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextField(
                   controller: publisherController,
                   decoration: const InputDecoration(
                     labelText: 'Penerbit',
                     border: OutlineInputBorder(),
+                    isDense: true,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextField(
                   controller: yearController,
                   decoration: const InputDecoration(
                     labelText: 'Tahun',
                     border: OutlineInputBorder(),
+                    isDense: true,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextField(
                   controller: stockController,
                   decoration: const InputDecoration(
                     labelText: 'Stok',
                     border: OutlineInputBorder(),
+                    isDense: true,
                   ),
                   keyboardType: TextInputType.number,
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: pathController,
-                  decoration: const InputDecoration(
-                    labelText: 'Path Gambar (contoh: storage/covers/file.jpg)',
-                    border: OutlineInputBorder(),
+                const SizedBox(height: 12),
+                // Image picker section
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: [
+                      if (selectedImage != null)
+                        Container(
+                          height: 120,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                              image: FileImage(selectedImage!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                      else if (book != null &&
+                          book.path != null &&
+                          book.path!.isNotEmpty)
+                        Container(
+                          height: 120,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  'http://perpus-api.mamorasoft.com/${book.path!}'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                      else
+                        Container(
+                          height: 120,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey[200],
+                          ),
+                          child: const Icon(
+                            Icons.image,
+                            size: 40,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      const SizedBox(height: 6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              final XFile? image = await picker.pickImage(
+                                source: ImageSource.gallery,
+                                imageQuality: 80,
+                              );
+                              if (image != null) {
+                                setDialogState(() {
+                                  selectedImage = File(image.path);
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.photo_library, size: 16),
+                            label: const Text('Galeri',
+                                style: TextStyle(fontSize: 12)),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                            ),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              final XFile? image = await picker.pickImage(
+                                source: ImageSource.camera,
+                                imageQuality: 80,
+                              );
+                              if (image != null) {
+                                setDialogState(() {
+                                  selectedImage = File(image.path);
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.camera_alt, size: 16),
+                            label: const Text('Kamera',
+                                style: TextStyle(fontSize: 12)),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (selectedImage != null ||
+                          (book != null &&
+                              book.path != null &&
+                              book.path!.isNotEmpty))
+                        TextButton(
+                          onPressed: () {
+                            setDialogState(() {
+                              selectedImage = null;
+                            });
+                          },
+                          child: const Text('Hapus Gambar'),
+                        ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 DropdownButtonFormField<int>(
                   value: selectedCategoryId,
+                  isDense: true,
                   decoration: const InputDecoration(
                     labelText: 'Kategori',
                     border: OutlineInputBorder(),
+                    isDense: true,
                   ),
-                  items: _categories.map<DropdownMenuItem<int>>((category) {
-                    return DropdownMenuItem<int>(
-                      value: category.id,
-                      child: Text(category.name),
-                    );
-                  }).toList(),
+                  items: _categories.isEmpty
+                      ? [
+                          const DropdownMenuItem<int>(
+                            value: null,
+                            child: Text('Loading categories...'),
+                          )
+                        ]
+                      : [
+                          const DropdownMenuItem<int>(
+                            value: null,
+                            child: Text('Pilih Kategori'),
+                          ),
+                          ..._categories.map<DropdownMenuItem<int>>((category) {
+                            return DropdownMenuItem<int>(
+                              value: category.id,
+                              child: Text(
+                                category.name,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          }).toList(),
+                        ],
                   onChanged: (value) {
                     setDialogState(() {
                       selectedCategoryId = value;
@@ -265,30 +400,65 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                if (titleController.text.isEmpty ||
-                    authorController.text.isEmpty ||
+                // Validasi categories tersedia
+                if (_categories.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content:
+                            Text('Kategori belum dimuat. Silakan coba lagi.')),
+                  );
+                  return;
+                }
+
+                // Validasi lengkap semua field required
+                if (titleController.text.trim().isEmpty ||
+                    authorController.text.trim().isEmpty ||
+                    publisherController.text.trim().isEmpty ||
+                    yearController.text.trim().isEmpty ||
+                    stockController.text.trim().isEmpty ||
                     selectedCategoryId == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Mohon lengkapi semua field')),
+                    const SnackBar(
+                        content: Text('Mohon lengkapi semua field wajib')),
+                  );
+                  return;
+                }
+
+                // Validasi format tahun
+                final year = int.tryParse(yearController.text.trim());
+                if (year == null ||
+                    year < 1000 ||
+                    year > DateTime.now().year + 10) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Format tahun tidak valid')),
+                  );
+                  return;
+                }
+
+                // Validasi format stok
+                final stock = int.tryParse(stockController.text.trim());
+                if (stock == null || stock < 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Format stok tidak valid')),
                   );
                   return;
                 }
 
                 try {
                   final bookData = {
-                    'judul': titleController.text,
-                    'pengarang': authorController.text,
-                    'penerbit': publisherController.text,
-                    'tahun': yearController.text,
+                    'judul': titleController.text.trim(),
+                    'pengarang': authorController.text.trim(),
+                    'penerbit': publisherController.text.trim(),
+                    'tahun': yearController.text.trim(),
                     'category_id': selectedCategoryId.toString(),
-                    'stok': stockController.text,
-                    'path': pathController.text, // Kirim path gambar
+                    'stok': stockController.text.trim(),
                   };
 
                   bool success;
                   if (book == null) {
                     // Create new book
-                    success = await _apiService.addBook(bookData);
+                    success = await _apiService.addBookWithImage(
+                        bookData, selectedImage);
                     if (success) {
                       Navigator.pop(context);
                       _loadBooks();
@@ -303,7 +473,8 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                     }
                   } else {
                     // Update existing book
-                    success = await _apiService.updateBook(book.id, bookData);
+                    success = await _apiService.updateBookWithImage(
+                        book.id, bookData, selectedImage);
                     if (success) {
                       Navigator.pop(context);
                       _loadBooks();
@@ -528,27 +699,30 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
 
           // Filter Section with Clear Active Filter Indicators
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: ExpansionTile(
-              title: Row(
-                children: [
-                  const Text('Filter & Sorting'),
-                  const SizedBox(width: 8),
-                  if (_hasActiveFilters())
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(12),
+              title: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const Text('Filter & Sorting'),
+                    const SizedBox(width: 6),
+                    if (_hasActiveFilters())
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          _getActiveFilterCount().toString(),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 11),
+                        ),
                       ),
-                      child: Text(
-                        _getActiveFilterCount().toString(),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ),
-                ],
+                  ],
+                ),
               ),
               leading: Icon(
                 Icons.filter_list,
@@ -556,7 +730,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
               ),
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(8),
@@ -567,34 +741,38 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                       // Active filters summary
                       if (_hasActiveFilters())
                         Container(
-                          padding: const EdgeInsets.all(12),
-                          margin: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.all(6),
+                          margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
                             color: Colors.blue.shade50,
                             border: Border.all(color: Colors.blue.shade200),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(6),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.filter_alt,
-                                      size: 16, color: Colors.blue.shade700),
+                                  Flexible(
+                                    child: Icon(Icons.filter_alt,
+                                        size: 16, color: Colors.blue.shade700),
+                                  ),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    'Filter Aktif:',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue.shade700,
+                                  Flexible(
+                                    child: Text(
+                                      'Filter Aktif:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue.shade700,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 4),
                               Wrap(
-                                spacing: 8,
-                                runSpacing: 4,
+                                spacing: 4,
+                                runSpacing: 1,
                                 children: _buildActiveFilterChips(),
                               ),
                             ],
@@ -607,6 +785,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                           // Category Filter
                           DropdownButtonFormField<int>(
                             value: _selectedCategoryId,
+                            isDense: true,
                             decoration: InputDecoration(
                               labelText: 'Kategori',
                               border: const OutlineInputBorder(),
@@ -616,9 +795,14 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                                   : Colors.white,
                               prefixIcon: Icon(
                                 Icons.category,
+                                size: 18,
                                 color: _selectedCategoryId != null
                                     ? Colors.blue
                                     : Colors.grey,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
                               ),
                             ),
                             items: [
@@ -642,11 +826,12 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                               _loadBooks(resetPage: true);
                             },
                           ),
-                          const SizedBox(height: 12),
-                          
+                          const SizedBox(height: 6),
+
                           // Author Filter
                           DropdownButtonFormField<String>(
                             value: _selectedAuthor,
+                            isDense: true,
                             decoration: InputDecoration(
                               labelText: 'Pengarang',
                               border: const OutlineInputBorder(),
@@ -656,9 +841,14 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                                   : Colors.white,
                               prefixIcon: Icon(
                                 Icons.person,
+                                size: 18,
                                 color: _selectedAuthor != null
                                     ? Colors.blue
                                     : Colors.grey,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
                               ),
                             ),
                             items: [
@@ -683,7 +873,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 6),
 
                       // Publisher and Year in Row
                       Row(
@@ -691,6 +881,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                           Expanded(
                             child: DropdownButtonFormField<String>(
                               value: _selectedPublisher,
+                              isDense: true,
                               decoration: InputDecoration(
                                 labelText: 'Penerbit',
                                 border: const OutlineInputBorder(),
@@ -700,9 +891,14 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                                     : Colors.white,
                                 prefixIcon: Icon(
                                   Icons.business,
+                                  size: 18,
                                   color: _selectedPublisher != null
                                       ? Colors.blue
                                       : Colors.grey,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
                                 ),
                               ),
                               items: [
@@ -726,10 +922,11 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                               },
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               value: _selectedYear,
+                              isDense: true,
                               decoration: InputDecoration(
                                 labelText: 'Tahun',
                                 border: const OutlineInputBorder(),
@@ -739,9 +936,14 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                                     : Colors.white,
                                 prefixIcon: Icon(
                                   Icons.calendar_today,
+                                  size: 18,
                                   color: _selectedYear != null
                                       ? Colors.blue
                                       : Colors.grey,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
                                 ),
                               ),
                               items: [
@@ -764,11 +966,12 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
 
                       // Row 3: Status Filter (full width)
                       DropdownButtonFormField<String>(
                         value: _selectedStatus,
+                        isDense: true,
                         decoration: InputDecoration(
                           labelText: 'Status Ketersediaan',
                           border: const OutlineInputBorder(),
@@ -779,10 +982,15 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                               : Colors.white,
                           prefixIcon: Icon(
                             Icons.inventory,
+                            size: 18,
                             color: (_selectedStatus != null &&
                                     _selectedStatus != 'Semua')
                                 ? Colors.blue
                                 : Colors.grey,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
                           ),
                         ),
                         items: _statusOptions.map((status) {
@@ -814,7 +1022,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                           _loadBooks(resetPage: true);
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
 
                       // Row 4: Sort options
                       Row(
@@ -874,7 +1082,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                               },
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: DropdownButtonFormField<String>(
                               value: _sortOrder,
@@ -921,7 +1129,7 @@ class _AdminBookManagementScreenState extends State<AdminBookManagementScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
 
                       // Row 5: Reset and info with better styling
                       Row(
@@ -1114,7 +1322,6 @@ class _BookListItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar Sampul
             SizedBox(
               width: 80,
               height: 110,
@@ -1150,8 +1357,7 @@ class _BookListItem extends StatelessWidget {
                       ),
               ),
             ),
-            const SizedBox(width: 16),
-            // Detail Buku
+            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1173,7 +1379,6 @@ class _BookListItem extends StatelessWidget {
                 ],
               ),
             ),
-            // Tombol Aksi
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [

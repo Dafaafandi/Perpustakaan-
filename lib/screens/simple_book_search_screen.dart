@@ -100,42 +100,88 @@ class _SimpleBookSearchScreenState extends State<SimpleBookSearchScreen> {
                           final book = _books[index];
                           return Card(
                             margin: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                              horizontal: 12,
+                              vertical: 4,
                             ),
-                            child: ListTile(
-                              leading: const Icon(
-                                Icons.book,
-                                color: Colors.blue,
-                                size: 40,
-                              ),
-                              title: Text(
-                                book.judul,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
                                 children: [
-                                  Text('Pengarang: ${book.pengarang}'),
-                                  Text('Stok: ${book.stok}'),
-                                  Text('Kategori: ${book.category.name}'),
+                                  const Icon(
+                                    Icons.book,
+                                    color: Colors.blue,
+                                    size: 36,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          book.judul,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          'oleh ${book.pengarang}',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 1),
+                                        Text(
+                                          book.category.name,
+                                          style: const TextStyle(
+                                            fontSize: 11,
+                                            color: Colors.blue,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6,
+                                            vertical: 1,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: book.stok > 0
+                                                ? Colors.green
+                                                : Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: Text(
+                                            'Stok: ${book.stok}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () => _showBookDetails(book),
+                                    icon: const Icon(Icons.info_outline),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 32,
+                                      minHeight: 32,
+                                    ),
+                                  ),
                                 ],
                               ),
-                              trailing: book.stok > 0
-                                  ? const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    )
-                                  : const Icon(
-                                      Icons.cancel,
-                                      color: Colors.red,
-                                    ),
-                              onTap: () {
-                                // Show book details
-                                _showBookDetails(book);
-                              },
                             ),
                           );
                         },

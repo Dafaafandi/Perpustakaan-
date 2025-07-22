@@ -54,7 +54,6 @@ class _AdminCategoryManagementScreenState
     setState(() => _isLoading = true);
 
     try {
-
       final result = await _apiService.getCategoriesPaginated(
         page: _currentPage,
         perPage: _perPage,
@@ -78,7 +77,6 @@ class _AdminCategoryManagementScreenState
             '  Categories on this page: ${_categories.map((c) => c.name).join(', ')}');
       }
     } catch (e) {
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Gagal memuat kategori: $e')),
@@ -297,7 +295,7 @@ class _AdminCategoryManagementScreenState
                         },
                       ),
                       const SizedBox(height: 12),
-                      
+
                       // Sort order dropdown
                       DropdownButtonFormField<String>(
                         value: _sortOrder,
